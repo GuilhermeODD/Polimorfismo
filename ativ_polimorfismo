@@ -1,0 +1,224 @@
+//agencia.cs
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Tarefa
+{
+    class Agencia
+    {
+        private static List<Conta> _contas;
+        public static List<Conta> Contas
+        {
+            get => _contas;
+           private set => _contas = value;
+        }
+        public static void AdicionarConta(Conta c)
+        {
+            Contas.Add(c);
+        }
+
+        public static void AdicionarConta(int Agencia, string Nome, string Cpfconta, int numero)
+        {
+            Conta c = new Conta(Agencia, Cpfconta, Nome, numero);
+            Contas.Add(c);
+        }
+        public static bool FecharConta(Conta c)
+        {
+            return Contas.Remove(c);
+        }
+        public static bool FecharConta(int agencia, string numero)
+        {
+            Conta c = new Conta(agencia, numero);
+
+            return Contas.Remove(c);
+        }
+    }
+}
+//conta.cs
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Tarefa
+{
+    class Conta
+    {
+          private int _agencia;
+          private int _numero;
+          private string _nome;
+          private string _cpf;
+          private  float _valor;
+        private float _saldo;
+
+        public int Agencia
+        {
+            get => _agencia;
+            set => _agencia = value;
+        }
+        public int Numero
+        {
+            get => _numero;
+            set => _numero = value;
+        }
+        public string Nome
+        {
+            get => _nome;
+            set => _nome = value;
+        }
+        public string Cpf
+        {
+            get => _cpf;
+            set => _cpf = value;
+        }
+        public float Valor
+        {
+            get => _valor;
+            protected set => _valor = value;
+        }
+        public float Saldo
+        {
+            get => _saldo;
+            set => _saldo = value;
+
+        }
+        public Conta(int Agencia, string Cpf, string Nome, int Numero, float valor,float saldo)
+        {
+            _agencia = Agencia;
+            _numero = Numero;
+            _nome = Nome;
+            _cpf = Cpf;
+            Valor = valor;
+        }
+        public Conta(int Agencia, string Nome)
+        {
+            _agencia = Agencia;
+            _nome = Nome;
+        }
+        public Conta(int Agencia, string Nome, string Cpfconta, int Numero)
+        {
+            _agencia = Agencia;
+            _nome = Nome;
+            _cpf = Cpfconta;
+            _numero = Numero;
+        }
+
+
+        public static bool Sacar(float valor)
+        {
+            if (valor < 0)
+            {
+                Console.WriteLine("Não se pode sacar valores negativos");
+            }
+            return true;
+           
+        }
+
+        public static bool Depositar(float val)
+        {
+            if (val > 0)
+            {
+                
+                return true;
+            }
+            return false;
+        }
+        public static bool Depositar(float valor, Conta c, Conta a)
+        {
+           
+            
+            if (a.Valor >= valor)
+            {
+                Sacar(1000);
+                if (c.Valor == valor)
+                {
+                    Depositar(500);
+                    return true;
+                }
+               
+            }
+            return false;
+        }
+    }
+
+}
+//contacorrente.cs
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Tarefa
+{
+    class ContaCorrente : Conta
+    {
+        public ContaCorrente(int Agencia, string Cpf, string Nome, int Numero, float valor, float saldo) : base(Agencia, Cpf, Nome, Numero, valor, saldo)
+        {
+
+        }
+    }
+}
+//contapoupança.cs
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Tarefa
+{
+    class ContaPoupanca: Conta
+    {
+        private float _juros;
+
+        public ContaPoupanca(float juros, int Agencia, string Cpf, string Nome, int Numero, float valor,float saldo) : base(Agencia, Cpf, Nome, Numero, valor, saldo)
+        {
+            juros = this.Juros;
+            valor = this.Valor;
+
+        }
+
+        public float Juros
+        {
+            get => _juros;
+            set => _juros = value;
+        }
+        public  void Render(int meses)
+        {
+            if (this.Saldo > 0) 
+            {
+                float valor = this.Saldo * this.Juros * meses;
+                this.Saldo += valor;
+                
+            }
+        
+        }
+    }
+}
+//program.cs
+using System;
+
+namespace Tarefa
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Agencia a1 = new Agencia();
+            Conta Bn = new Conta(1,"984242699", "Vitor", 11377624998, 14000,60000);
+            Conta Bn2 = new Conta(2, "978300123", "Guilherme", 8291037428, 0,-1);
+            ContaCorrente Bc = new ContaCorrente(3,"87654321", "Adam", 7, 500,1000);
+            ContaPoupanca Bp = new ContaPoupanca(5,3,"20934909","Paulatejano",2,1000,16500);
+            
+            Agencia.AdicionarConta(Bn);
+            Agencia.AdicionarConta(Bn2);
+            Agencia.AdicionarConta(Bp);
+            Agencia.AdicionarConta(Bc);
+
+            
+
+
+            
+           
+           
+            
+        }
+    }
+}
